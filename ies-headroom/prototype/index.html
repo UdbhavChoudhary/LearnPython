@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Headroom for IES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --blue:#236CFF; --blue-dk:#1650C7; --blue-50:#EEF3FF; --blue-100:#DCE7FF;
+  --navy:#0D1B3E; --ink:#1F2433; --ink-2:#4A5163; --ink-3:#6E7587;
+  --line:#E1E5EE; --line-2:#EDF0F6; --bg:#F5F7FB; --card:#FFFFFF;
+  --green:#108043; --green-50:#E6F4EC; --amber:#B25E00; --amber-50:#FFF3E0;
+  --red:#C62828; --red-50:#FDECEC; --violet:#5B3FD6; --violet-50:#F0ECFF;
+  --radius:10px; --shadow:0 1px 2px rgba(13,27,62,.06),0 2px 8px rgba(13,27,62,.05);
+  --font:"Nunito Sans",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--font);font-size:14px;line-height:1.5;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer}
+a{color:var(--blue)}
+h1,h2,h3,h4{margin:0;color:var(--navy);text-wrap:balance;line-height:1.25}
+h1{font-size:24px;font-weight:800}
+h2{font-size:18px;font-weight:800}
+h3{font-size:15px;font-weight:700}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-size:12.5px}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* Shell */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.side{background:var(--navy);color:#C9D3EA;padding:18px 12px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 8px}
+.brand-mark{width:30px;height:30px;border-radius:8px;background:var(--blue);display:grid;place-items:center;color:#fff;font-weight:800}
+.brand b{color:#fff;font-size:15px;display:block;line-height:1.1}
+.brand small{font-size:11.5px;color:#93A2C6}
+.nav-group{display:flex;flex-direction:column;gap:2px}
+.nav-label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#7F8DB0;padding:6px 10px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#D5DDF0;text-decoration:none;background:none;border:0;text-align:left;width:100%}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item.active{background:var(--blue);color:#fff}
+.nav-item .dot{width:7px;height:7px;border-radius:50%;background:#FFB547;margin-left:auto}
+.nav-ico{width:18px;height:18px;flex:none;opacity:.9}
+.side-foot{margin-top:auto;font-size:11.5px;color:#7F8DB0;padding:8px 10px;border-top:1px solid rgba(255,255,255,.08)}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:12px 28px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.search{flex:1;max-width:520px;display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--ink-3)}
+.search input{border:0;background:transparent;outline:none;flex:1;font:inherit;color:var(--ink)}
+.role-switch{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px;margin-left:auto}
+.role-switch button{border:0;background:none;padding:6px 12px;border-radius:6px;color:var(--ink-2);font-weight:600;font-size:13px}
+.role-switch button.on{background:var(--card);color:var(--blue);box-shadow:var(--shadow)}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff;background:var(--violet);flex:none}
+.page{padding:24px 28px 120px;display:flex;flex-direction:column;gap:20px;max-width:1240px;width:100%}
+.crumb{font-size:12.5px;color:var(--ink-3)}
+.crumb a{text-decoration:none}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-head p{color:var(--ink-2);margin-top:4px}
+
+/* Components */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.pad{padding:18px 20px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g-main{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr)}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.wrap{flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:10px}
+.muted{color:var(--ink-3)}
+.sub{color:var(--ink-2)}
+.small{font-size:12.5px}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:8px;font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:#C5CCDA}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-dk)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--blue)}
+.btn.sm{padding:5px 10px;font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.p-blue{background:var(--blue-50);color:var(--blue-dk)}
+.p-green{background:var(--green-50);color:var(--green)}
+.p-amber{background:var(--amber-50);color:var(--amber)}
+.p-red{background:var(--red-50);color:var(--red)}
+.p-violet{background:var(--violet-50);color:var(--violet)}
+.p-grey{background:var(--line-2);color:var(--ink-2)}
+.kpi{display:flex;flex-direction:column;gap:2px}
+.kpi b{font-size:24px;color:var(--navy);font-weight:800;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px}
+.bar.green i{background:var(--green)}
+.bar.amber i{background:#E08A00}
+.divider{height:1px;background:var(--line)}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);text-align:left;font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:12px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tr.click{cursor:pointer}
+tr.click:hover td{background:#FAFBFE}
+.table-wrap{overflow-x:auto}
+.note{font-size:12px;color:var(--ink-3);border-left:3px solid var(--line);padding-left:10px}
+.ai-chip{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;color:var(--violet)}
+.spark{width:14px;height:14px}
+
+/* Radar */
+.signal{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:start;padding:16px 0;border-top:1px solid var(--line-2)}
+.signal:first-of-type{border-top:0}
+.sig-ico{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-weight:800}
+.ready{min-width:120px;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.radar-hero{background:linear-gradient(0deg,var(--card),var(--card)) padding-box;border:1px solid var(--blue-100)}
+.radar-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line-2);background:var(--blue-50);border-radius:var(--radius) var(--radius) 0 0}
+
+/* Marketplace */
+.app-card{display:flex;flex-direction:column;gap:10px;padding:18px;cursor:pointer;transition:border-color .15s}
+.app-card:hover{border-color:var(--blue)}
+.app-logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+.fit{font-weight:800;color:var(--green)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.ask-box{display:flex;gap:10px;align-items:center;padding:14px 16px}
+.ask-box input{flex:1;border:0;outline:none;font:inherit;font-size:15px;color:var(--ink);background:transparent;min-width:0}
+
+/* Autonomy dial */
+.dial{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.dial button{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:12px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.dial button.on{border-color:var(--blue);background:var(--blue-50)}
+.dial button b{color:var(--navy)}
+.dial button span{font-size:12.5px;color:var(--ink-2)}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.step i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;background:var(--line-2);color:var(--ink-2);font-size:11.5px}
+.step.on{color:var(--navy)} .step.on i{background:var(--blue);color:#fff}
+.step.done i{background:var(--green);color:#fff}
+.step-sep{width:24px;height:1px;background:var(--line);align-self:center}
+
+/* Drawer / modal */
+.scrim{position:fixed;inset:0;background:rgba(13,27,62,.35);z-index:40;display:flex;justify-content:flex-end}
+.drawer{width:min(520px,100%);height:100%;background:var(--card);overflow:auto;padding:22px 24px 40px;display:flex;flex-direction:column;gap:16px;box-shadow:-8px 0 24px rgba(13,27,62,.15)}
+.modal-wrap{position:fixed;inset:0;background:rgba(13,27,62,.4);z-index:40;display:grid;place-items:center;padding:16px}
+.modal{width:min(640px,100%);max-height:90vh;overflow:auto;background:var(--card);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:18px}
+.x{border:0;background:var(--line-2);width:30px;height:30px;border-radius:8px;font-size:16px;color:var(--ink-2)}
+.reason{background:var(--violet-50);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.je{font-family:var(--mono);font-size:12.5px}
+.je td{padding:7px 8px}
+.src{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:12.5px}
+
+/* Chat */
+.chat{display:flex;flex-direction:column;gap:14px;padding:20px}
+.msg{max-width:78%;padding:12px 14px;border-radius:12px;display:flex;flex-direction:column;gap:8px}
+.msg.me{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.hu{align-self:flex-start;background:var(--green-50);border:1px solid #BFE3CD;border-bottom-left-radius:4px}
+.who{font-size:11.5px;font-weight:800;color:var(--ink-3)}
+.msg.me .who{color:#D6E3FF}
+.compose{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--line)}
+.compose input{flex:1;border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;min-width:0}
+.typing{display:inline-flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);animation:b 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+/* Studio */
+.code{background:#0F1730;color:#D6DEF5;border-radius:10px;padding:14px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.6;overflow-x:auto;white-space:pre}
+.code .k{color:#8FB3FF}.code .s{color:#9FE0B5}.code .c{color:#7C88A8}
+.tool{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
+.tool input{accent-color:var(--blue)}
+.trace{font-family:var(--mono);font-size:12px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px;min-height:120px}
+.check{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line-2)}
+.tick{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800}
+.bars{display:flex;align-items:flex-end;gap:10px;height:140px;padding-top:10px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bars span.b{width:100%;max-width:42px;background:var(--blue);border-radius:6px 6px 0 0}
+.bars small{font-size:11px;color:var(--ink-3)}
+
+/* Tour */
+.tour{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;width:min(380px,calc(100% - 32px));background:var(--navy);color:#E4EAF8;border-radius:14px;padding:16px 18px;box-shadow:0 12px 32px rgba(13,27,62,.3);display:flex;flex-direction:column;gap:10px}
+.tour h4{color:#fff;font-size:14.5px}
+.tour p{font-size:13px;color:#C9D3EA}
+.tour .row button{border:0;border-radius:8px;padding:7px 12px;font-weight:700;font-size:12.5px}
+.tour .next{background:var(--blue);color:#fff}
+.tour .prev{background:rgba(255,255,255,.1);color:#fff}
+.tour .skip{background:none;color:#93A2C6;margin-left:auto}
+.tour-prog{height:4px;background:rgba(255,255,255,.12);border-radius:9px;overflow:hidden}
+.tour-prog i{display:block;height:100%;background:#7FA8FF}
+.tour-min{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--navy);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;box-shadow:0 8px 20px rgba(13,27,62,.3)}
+.hl{outline:3px solid #FFB547;outline-offset:3px;border-radius:10px;transition:outline-color .2s}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;z-index:80;font-weight:600;font-size:13px}
+.banner{display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:10px;background:var(--green-50);color:#0B5A2F;border:1px solid #BFE3CD}
+
+@media (max-width:1100px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g-main{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:8px;padding:10px 16px}
+  .side .nav-group{flex-direction:row;flex-wrap:wrap}
+  .nav-label,.side-foot{display:none}
+  .nav-item{width:auto}
+  .top{padding:10px 16px;flex-wrap:wrap}
+  .page{padding:18px 16px 140px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .dial{grid-template-columns:1fr}
+  .signal{grid-template-columns:36px 1fr}
+  .ready{grid-column:2;align-items:flex-start}
+  .msg{max-width:92%}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side"></aside>
+  <div class="main">
+    <header class="top">
+      <label class="search" for="gsearch"><svg class="nav-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg><input id="gsearch" placeholder="Search or ask Intuit Intelligence"></label>
+      <div class="role-switch" role="tablist" aria-label="Switch view">
+        <button data-role="cfo" id="role-cfo">Finance leader</button>
+        <button data-role="expert" id="role-expert">Intuit expert</button>
+        <button data-role="dev" id="role-dev">Developer</button>
+      </div>
+      <div class="avatar" id="who">MC</div>
+    </header>
+    <main class="page" id="page"></main>
+  </div>
+</div>
+<div id="layer"></div>
+<div id="tour-slot"></div>
+
+<script>
+/* ---------- Data ---------- */
+const CO = {name:"Harbor & Pine Outdoor", rev:"$64M revenue", ppl:"380 employees", ents:"2 entities today (US, Canada). UK launches in 41 days."};
+
+const ICON = {
+  home:'<path d="M3 9l7-6 7 6v8H3z"/>',
+  radar:'<circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="3"/><path d="M10 10l5-5"/>',
+  store:'<path d="M3 7h14l-1 10H4z"/><path d="M7 7V5a3 3 0 016 0v2"/>',
+  close:'<rect x="3" y="3" width="14" height="14" rx="2"/><path d="M6 10l3 3 5-6"/>',
+  chat:'<path d="M3 4h14v10H8l-5 3z"/>',
+  queue:'<path d="M4 5h12M4 10h12M4 15h8"/>',
+  demand:'<path d="M3 16l4-5 3 3 6-8"/>',
+  build:'<path d="M7 6l-4 4 4 4M13 6l4 4-4 4"/>',
+  cert:'<circle cx="10" cy="8" r="5"/><path d="M7 12l-1 6 4-2 4 2-1-6"/>',
+  earn:'<path d="M10 3v14M14 6H8.5a2.5 2.5 0 000 5h3a2.5 2.5 0 010 5H6"/>'
+};
+const ico = n => `<svg class="nav-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[n]}</svg>`;
+const SPARK = '<svg class="spark" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l1.8 5.2L15 7l-5.2 1.8L8 14l-1.8-5.2L1 7l5.2-1.8z"/></svg>';
+
+const NAV = {
+  cfo:{who:"MC",color:"#5B3FD6",items:[
+    ["home","Home","home"],["radar","Growth Radar","radar",true],["store","Agent & App Store","store"],["close","Month-end close","close"],["advisor","Ask an advisor","chat"]]},
+  expert:{who:"DO",color:"#108043",items:[["queue","Review queue","queue"]]},
+  dev:{who:"AM",color:"#B25E00",items:[["demand","Demand board","demand"],["studio","Agent Studio","build"],["certify","Certification","cert"],["earn","Publish & earn","earn"]]}
+};
+const ROLE_OF = {home:"cfo",radar:"cfo",signal:"cfo",store:"cfo",agent:"cfo",close:"cfo",advisor:"cfo",queue:"expert",demand:"dev",studio:"dev",certify:"dev",earn:"dev"};
+
+const APPS = [
+  {id:"revflow",name:"RevFlow Agent",by:"Ledgerline",color:"#236CFF",init:"RF",fit:94,cat:"Revenue",verified:2,
+   blurb:"Builds ASC 606 revenue schedules for subscriptions and bundles, then proposes the deferral entries each month.",
+   price:"$1.10 per active contract / month",used:212,rating:4.8},
+  {id:"subsledger",name:"SubLedger Sync",by:"Northpeak Apps",color:"#0E7C86",init:"SL",fit:81,cat:"Revenue",verified:1,
+   blurb:"Pulls subscription data from Stripe and Recurly into IES. Recognition rules are set by your team.",
+   price:"$399 / month",used:540,rating:4.5},
+  {id:"deferra",name:"Deferra",by:"Deferra Inc.",color:"#7A4DD8",init:"DF",fit:68,cat:"Revenue",verified:0,
+   blurb:"Spreadsheet-style deferred revenue tracker. Exports journal entries as CSV for import.",
+   price:"$149 / month",used:1180,rating:4.1},
+];
+
+const SIGNALS = [
+  {id:"rev",tone:"red",title:"Subscription revenue is 18% of sales and rising",
+   why:"You book subscription boxes in full when the order ships. Under ASC 606 most of it should be spread over the term. Your auditor flagged this last year.",
+   ready:22,fix:"Needs a revenue recognition agent",cta:"See options"},
+  {id:"uk",tone:"amber",title:"UK entity goes live in 41 days",
+   why:"You will need GBP books, UK VAT filing under Making Tax Digital, and a 3-entity consolidation.",
+   ready:48,fix:"IES native plus 1 marketplace agent",cta:"See plan"},
+  {id:"ap",tone:"blue",title:"Headcount passed 350 and AP volume doubled",
+   why:"Bills over $25k still need only one approver. Companies your size usually add a second approval step.",
+   ready:74,fix:"Built into IES. Turn on in 2 minutes",cta:"Turn on"}
+];
+
+let CLOSE = [
+  {id:"c1",task:"Bank reconciliation, 6 accounts",agent:"Accounting Agent",by:"Intuit",mode:"auto",status:"done",amt:"",conf:99},
+  {id:"c2",task:"Intercompany eliminations US and CA",agent:"IES close automation",by:"Intuit",mode:"auto",status:"done",amt:"$1,284,900",conf:99},
+  {id:"c3",task:"Subscription revenue deferral, August",agent:"RevFlow Agent",by:"Ledgerline",mode:"approve",status:"review",amt:"$412,300",conf:96},
+  {id:"c4",task:"Accrual for UK legal set-up fees",agent:"Accounting Agent",by:"Intuit",mode:"expert",status:"expert",amt:"$38,500",conf:71},
+  {id:"c5",task:"Sales tax filing, 14 US states",agent:"Sales Tax Agent",by:"Intuit",mode:"approve",status:"review",amt:"$96,210",conf:97},
+  {id:"c6",task:"Inventory write-down, discontinued tents",agent:"Controller",by:"Your team",mode:"manual",status:"todo",amt:"$22,000",conf:null},
+];
+
+/* ---------- State ---------- */
+const S = {installed:false, dial:"approve", tourOn:true, tourStep:0, chatStage:0, apOn:false, testRun:false, published:false};
+try{ const t = localStorage.getItem("hr-tour"); if(t==="off") S.tourOn=false; }catch(e){}
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const h = (s)=>s;
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2400)}
+function go(r){ if(location.hash.slice(1)===r) render(); else location.hash=r; }
+function pillFor(status){
+  return {done:'<span class="pill p-green">Done by agent</span>',review:'<span class="pill p-blue">Needs your approval</span>',
+    expert:'<span class="pill p-violet">With Intuit expert</span>',todo:'<span class="pill p-grey">To do</span>',approved:'<span class="pill p-green">Approved</span>'}[status];
+}
+function modeLabel(m){return {auto:"Acts on its own",approve:"Acts with approval",expert:"Expert sign-off",manual:"Manual"}[m]}
+function toneCls(t){return {red:"p-red",amber:"p-amber",blue:"p-blue",green:"p-green"}[t]}
+function toneBg(t){return {red:"background:var(--red-50);color:var(--red)",amber:"background:var(--amber-50);color:var(--amber)",blue:"background:var(--blue-50);color:var(--blue-dk)"}[t]}
+
+/* ---------- Views ---------- */
+const V = {};
+
+V.home = () => `
+<div class="page-head"><div><h1>Good morning, Maya</h1><p>${CO.name} · ${CO.rev} · ${CO.ppl}</p></div>
+<div class="row"><span class="ai-chip">${SPARK} Intuit Intelligence is on</span></div></div>
+
+<div class="grid g4">
+  <div class="card pad kpi"><span class="label">Cash across entities</span><b>$8.42M</b><span class="small muted">14.2 weeks of runway at current burn</span></div>
+  <div class="card pad kpi"><span class="label">August close</span><b>Day 2 of 4</b><span class="small muted">Last year: 9 business days</span></div>
+  <div class="card pad kpi"><span class="label">Close work done by agents</span><b>71%</b><span class="small muted">Up from 38% in March</span></div>
+  <div class="card pad kpi"><span class="label">Gross margin, July</span><b>46.8%</b><span class="small muted">1.2 pts under plan</span></div>
+</div>
+
+<div class="grid g-main">
+  <section class="card radar-hero" id="home-radar">
+    <div class="radar-top"><div class="row">${ico("radar")}<div><h2>Growth Radar</h2><p class="small sub">Things you are about to outgrow, caught before they turn into spreadsheets</p></div></div>
+      <button class="btn sm" onclick="go('radar')">Open Radar</button></div>
+    <div class="pad" style="padding-top:4px">
+      ${SIGNALS.map(s=>`
+      <div class="signal">
+        <div class="sig-ico" style="${toneBg(s.tone)}">${s.ready}%</div>
+        <div class="stack" style="gap:4px"><h3>${s.title}</h3><p class="small sub">${s.why}</p></div>
+        <div class="ready"><span class="small muted">Readiness</span><div class="bar ${s.ready>70?'green':s.ready>40?'amber':''}" style="width:110px"><i style="width:${s.ready}%"></i></div>
+        <button class="btn sm ${s.id==='rev'?'primary':''}" onclick="${s.id==='rev'?"go('signal')":s.id==='ap'?"turnOnAP()":"toast('UK plan opens in the full build')"}">${s.id==='ap'&&S.apOn?'Turned on':s.cta}</button></div>
+      </div>`).join("")}
+    </div>
+  </section>
+  <section class="stack">
+    <div class="card pad stack">
+      <div class="row between"><h3>Close status</h3><button class="btn ghost sm" onclick="go('close')">Open close</button></div>
+      <div class="bar"><i style="width:71%"></i></div>
+      <div class="row between small"><span>4 of 6 tasks finished or waiting on you</span><span class="num muted">Target: Day 4</span></div>
+      <div class="row wrap"><span class="pill p-blue">2 need your approval</span><span class="pill p-violet">1 with expert</span></div>
+    </div>
+    <div class="card pad stack">
+      <div class="row between"><h3>Your Intuit expert</h3><span class="pill p-green">Online</span></div>
+      <div class="row"><div class="avatar" style="background:#108043">DO</div><div><b>Dana Ortiz, CPA</b><p class="small muted">Revenue and multi-entity specialist. Median reply 1h 50m</p></div></div>
+      <button class="btn sm" onclick="go('advisor')">Ask a question</button>
+    </div>
+    <p class="note">All company figures in this prototype are sample data.</p>
+  </section>
+</div>`;
+
+V.radar = () => `
+<div class="crumb"><a href="#home">Home</a> / Growth Radar</div>
+<div class="page-head"><div><h1>Growth Radar</h1><p>Radar reads your books every night and compares them with 4,100 IES companies one size up from you.</p></div>
+<span class="ai-chip">${SPARK} Last scan: today, 04:12</span></div>
+<div class="grid g3">
+  <div class="card pad kpi"><span class="label">Open signals</span><b>3</b><span class="small muted">1 urgent, 1 in 41 days, 1 quick fix</span></div>
+  <div class="card pad kpi"><span class="label">Resolved this year</span><b>5</b><span class="small muted">Multi-currency, project costing, 3 more</span></div>
+  <div class="card pad kpi"><span class="label">Time saved by fixes</span><b>31 hrs / month</b><span class="small muted">Measured from close logs</span></div>
+</div>
+<section class="card pad" id="radar-list">
+  ${SIGNALS.map(s=>`
+  <div class="signal">
+    <div class="sig-ico" style="${toneBg(s.tone)}">${s.ready}%</div>
+    <div class="stack" style="gap:6px"><div class="row wrap"><h3>${s.title}</h3><span class="pill ${toneCls(s.tone)}">${s.tone==='red'?'Urgent':s.tone==='amber'?'Plan ahead':'Quick fix'}</span></div>
+      <p class="sub">${s.why}</p><p class="small"><b>Suggested fix:</b> ${s.fix}</p></div>
+    <div class="ready"><button class="btn sm ${s.id==='rev'?'primary':''}" onclick="${s.id==='rev'?"go('signal')":s.id==='ap'?"turnOnAP()":"toast('UK plan opens in the full build')"}">${s.id==='ap'&&S.apOn?'Turned on':s.cta}</button></div>
+  </div>`).join("")}
+</section>
+<section class="card pad stack">
+  <h3>How Radar decides</h3>
+  <div class="grid g3 small">
+    <div><b>1. Watch</b><p class="sub">Tracks 40 growth triggers: new entities, currencies, revenue models, headcount, transaction volume, audit notes.</p></div>
+    <div><b>2. Compare</b><p class="sub">Checks what companies one stage ahead did at the same point, and which fixes stuck.</p></div>
+    <div><b>3. Suggest</b><p class="sub">Offers the lightest fix first: an IES setting, then an Intuit agent, then a verified partner agent, then an expert.</p></div>
+  </div>
+</section>`;
+
+V.signal = () => `
+<div class="crumb"><a href="#home">Home</a> / <a href="#radar">Growth Radar</a> / Subscription revenue</div>
+<div class="page-head"><div><div class="row wrap"><span class="pill p-red">Urgent</span><span class="small muted">Found 12 Aug · Readiness 22%</span></div>
+<h1 style="margin-top:6px">Subscription revenue is 18% of sales and rising</h1></div></div>
+<div class="grid g-main">
+  <div class="stack" style="gap:16px">
+    <section class="card pad stack">
+      <h3>What Radar saw</h3>
+      <div class="grid g3">
+        <div class="kpi"><span class="label">Subscription invoices, Q2</span><b>1,284</b></div>
+        <div class="kpi"><span class="label">Booked up front</span><b>$2.1M</b></div>
+        <div class="kpi"><span class="label">Should be deferred (est.)</span><b>$1.37M</b></div>
+      </div>
+      <div class="stack small">
+        <div class="src">${ico("close")} <span>Item "Trailhead Box, 12-month plan" posted to 4000 Sales in full on ship date</span></div>
+        <div class="src">${ico("chat")} <span>2025 audit letter, note 3: "Consider ratable recognition for subscription products"</span></div>
+        <div class="src">${ico("demand")} <span>Subscription share grew from 6% to 18% in 3 quarters</span></div>
+      </div>
+    </section>
+    <section class="card pad stack">
+      <h3>If you do nothing</h3>
+      <p class="sub">Your auditor is likely to post a year-end adjustment. Your Q4 revenue would move by about $1.4M after the board has seen it. Companies in this spot often start looking at a new ERP.</p>
+    </section>
+  </div>
+  <section class="card pad stack" id="fix-options">
+    <h3>Ways to fix it</h3>
+    <div class="stack">
+      <div class="card pad stack" style="box-shadow:none">
+        <div class="row between"><b>Set up IES revenue schedules yourself</b><span class="pill p-grey">Native</span></div>
+        <p class="small sub">Works for simple plans. You would build and update 9 plan templates by hand. About 3 days of work.</p>
+      </div>
+      <div class="card pad stack" style="box-shadow:none;border-color:var(--blue)">
+        <div class="row between wrap"><b>Add a verified revenue agent</b><span class="pill p-blue">Recommended</span></div>
+        <p class="small sub">Three agents fit your data. The top match is used by 212 companies with the same plan types.</p>
+        <button class="btn primary sm" onclick="go('store')">Compare agents</button>
+      </div>
+      <div class="card pad stack" style="box-shadow:none">
+        <div class="row between"><b>Have an Intuit expert set it up</b><span class="pill p-violet">Human + AI</span></div>
+        <p class="small sub">Dana Ortiz, CPA, reviews your contracts and configures schedules. Fixed fee $1,800.</p>
+      </div>
+    </div>
+  </section>
+</div>`;
+
+V.store = () => `
+<div class="crumb"><a href="#home">Home</a> / Agent &amp; App Store</div>
+<div class="page-head"><div><h1>Agent &amp; App Store</h1><p>Agents and apps that work inside IES, checked by Intuit for finance accuracy.</p></div></div>
+<div class="card ask-box" id="store-ask">${SPARK}<input id="store-q" value="We started selling subscription boxes and our auditor wants ASC 606" aria-label="Describe what you need"><button class="btn primary sm" onclick="toast('Showing 3 matches ranked by fit with your data')">Find</button></div>
+<div class="row wrap small"><span class="muted">Filters:</span><span class="pill p-blue">Works with 2+ entities</span><span class="pill p-blue">Verified for Finance</span><span class="pill p-grey">Revenue</span><span class="pill p-grey">Any price</span></div>
+<div class="grid g3" id="store-grid">
+  ${APPS.map(a=>`
+  <article class="card app-card" onclick="${a.id==='revflow'?"go('agent')":"toast('Only RevFlow is clickable in this prototype')"}" tabindex="0">
+    <div class="row"><div class="app-logo" style="background:${a.color}">${a.init}</div><div><h3>${a.name}</h3><p class="small muted">by ${a.by}</p></div></div>
+    <div class="chips">${a.verified===2?'<span class="pill p-green">Verified L2 · acts with approval</span>':a.verified===1?'<span class="pill p-blue">Verified L1 · read only</span>':'<span class="pill p-grey">Not verified</span>'}</div>
+    <p class="small sub">${a.blurb}</p>
+    <div class="divider"></div>
+    <div class="row between small"><span><span class="fit">${a.fit}% fit</span> <span class="muted">with your books</span></span><span class="muted">★ ${a.rating}</span></div>
+    <div class="row between small"><span class="muted">Used by ${a.used} IES companies</span><span>${a.price}</span></div>
+  </article>`).join("")}
+</div>
+<section class="card pad stack">
+  <div class="row between wrap"><h3>Not finding it? Companies like you asked for these</h3><span class="small muted">Requests go to the developer Demand board</span></div>
+  <div class="grid g3 small">
+    <div class="src">Canada GST/HST by province <span class="pill p-amber" style="margin-left:auto">In build, 2 devs</span></div>
+    <div class="src">Landed cost for importers <span class="pill p-amber" style="margin-left:auto">In build, 1 dev</span></div>
+    <div class="src">Grant and fund accounting <span class="pill p-grey" style="margin-left:auto">148 requests</span></div>
+  </div>
+</section>`;
+
+V.agent = () => `
+<div class="crumb"><a href="#store">Agent &amp; App Store</a> / RevFlow Agent</div>
+<div class="page-head">
+  <div class="row"><div class="app-logo" style="background:#236CFF;width:52px;height:52px;font-size:18px">RF</div>
+  <div><h1>RevFlow Agent</h1><p>by Ledgerline · Revenue recognition · ★ 4.8 from 96 reviews</p></div></div>
+  <div class="row">${S.installed?'<span class="pill p-green">Installed · shadow mode</span><button class="btn" onclick="go(\'close\')">See it in close</button>':'<button class="btn primary" id="install-btn" onclick="openInstall()">Try in shadow mode</button>'}</div>
+</div>
+<div class="grid g-main">
+  <div class="stack" style="gap:16px">
+    <section class="card pad stack">
+      <h3>What it does in your books</h3>
+      <ul class="sub" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+        <li>Reads your subscription invoices and plan terms and builds one schedule per contract.</li>
+        <li>Each month, proposes the deferral and release entries with a link to every source invoice.</li>
+        <li>Handles upgrades, pauses, refunds and bundles with a free item.</li>
+        <li>Works across US, CA and UK entities in local currency.</li>
+      </ul>
+    </section>
+    <section class="card pad stack">
+      <h3>Access it asks for</h3>
+      <div class="table-wrap"><table class="small"><tr><th>Data</th><th>Access</th><th>Why</th></tr>
+        <tr><td>Invoices, items, customers</td><td><span class="pill p-green">Read</span></td><td>Find subscription sales</td></tr>
+        <tr><td>Journal entries</td><td><span class="pill p-amber">Propose only</span></td><td>Post deferrals after approval</td></tr>
+        <tr><td>Bank, payroll, HR</td><td><span class="pill p-grey">No access</span></td><td>Not needed</td></tr></table></div>
+      <p class="note">Data stays inside Intuit. Ledgerline sees only what the agent needs to run and cannot export it.</p>
+    </section>
+  </div>
+  <section class="card pad stack" id="trust-panel">
+    <div class="row between"><h3>Intuit check results</h3><span class="pill p-green">Verified L2</span></div>
+    <div class="check"><div class="tick" style="background:var(--green)">✓</div><div><b>Accuracy on 1,200 test contracts</b><p class="small muted">Pass mark 98%</p></div><b class="num">99.2%</b></div>
+    <div class="check"><div class="tick" style="background:var(--green)">✓</div><div><b>Every number links to a source</b><p class="small muted">No figure without an invoice or plan behind it</p></div><b class="num">100%</b></div>
+    <div class="check"><div class="tick" style="background:var(--green)">✓</div><div><b>Expert panel review</b><p class="small muted">3 Intuit CPAs checked 60 edge cases</p></div><b class="num">3 / 3</b></div>
+    <div class="check"><div class="tick" style="background:var(--green)">✓</div><div><b>Security and data handling</b><p class="small muted">SOC 2 Type II, no data leaves IES</p></div><b class="num">Pass</b></div>
+    <div class="divider"></div>
+    <div class="row between small"><span class="muted">Live accuracy, last 90 days</span><b class="num">99.4% across 212 companies</b></div>
+    <div class="row between small"><span class="muted">Price</span><b>$1.10 per contract / month</b></div>
+    <div class="row between small"><span class="muted">For you (1,284 contracts)</span><b class="num">about $1,412 / month</b></div>
+  </section>
+</div>`;
+
+V.close = () => `
+<div class="crumb"><a href="#home">Home</a> / Month-end close</div>
+<div class="page-head"><div><h1>August close</h1><p>Day 2 of 4. Agents did the routine work overnight. You see only what needs a decision.</p></div>
+<div class="row"><span class="pill p-green">Acts on its own</span><span class="pill p-blue">Acts with approval</span><span class="pill p-violet">Expert sign-off</span></div></div>
+${S.installed?`<div class="banner">${SPARK}<span><b>RevFlow is running in shadow mode.</b> It prepares entries next to your current process for 14 days. Nothing posts until you approve.</span></div>`:""}
+<section class="card" id="close-table"><div class="table-wrap"><table>
+<tr><th>Task</th><th>Done by</th><th>Mode</th><th class="num">Amount</th><th>Confidence</th><th>Status</th></tr>
+${CLOSE.map(c=>`<tr class="click" onclick="openTask('${c.id}')"><td><b>${c.task}</b></td><td class="small">${c.agent}<br><span class="muted">${c.by}</span></td><td class="small">${modeLabel(c.mode)}</td><td class="num">${c.amt||'<span class="muted">n/a</span>'}</td>
+<td class="num">${c.conf==null?'<span class="muted">n/a</span>':`<span style="color:${c.conf<80?'var(--amber)':'var(--ink)'};font-weight:700">${c.conf}%</span>`}</td><td>${pillFor(c.status)}</td></tr>`).join("")}
+</table></div></section>
+<section class="grid g3">
+  <div class="card pad stack"><span class="label">Acts on its own</span><p class="small sub">Low-risk, rule-based work with a 99%+ track record. Reversible. Always logged.</p></div>
+  <div class="card pad stack"><span class="label">Acts with approval</span><p class="small sub">Anything that posts to the ledger above your $10k threshold, or the first 14 days of any new agent.</p></div>
+  <div class="card pad stack"><span class="label">Expert sign-off</span><p class="small sub">Confidence under 80%, a new rule, tax filings in a new country, or anything touching a loan covenant.</p></div>
+</section>`;
+
+V.advisor = () => `
+<div class="crumb"><a href="#home">Home</a> / Ask an advisor</div>
+<div class="page-head"><div><h1>Ask an advisor</h1><p>Intuit Intelligence answers from your books. An Intuit expert steps in when the answer needs a signature.</p></div></div>
+<div class="grid g-main">
+<section class="card" style="display:flex;flex-direction:column">
+  <div class="chat" id="chat"></div>
+  <div class="compose"><input id="chat-in" value="If we recognize subscription revenue over time, what happens to Q3 EBITDA and our bank covenant?" aria-label="Your question"><button class="btn primary" onclick="sendChat()">Ask</button></div>
+</section>
+<section class="stack">
+  <div class="card pad stack"><h3>When a human steps in</h3>
+  <p class="small sub">The AI hands off to an Intuit expert when a question touches a loan covenant, tax in a new country, an audit position, or when its own confidence is under 80%.</p></div>
+  <div class="card pad stack"><h3>Your expert network</h3>
+  <div class="row"><div class="avatar" style="background:#108043">DO</div><div><b>Dana Ortiz, CPA</b><p class="small muted">Revenue, multi-entity</p></div></div>
+  <div class="row"><div class="avatar" style="background:#0E7C86">RK</div><div><b>Rahul Kapoor, CA</b><p class="small muted">UK VAT, international tax</p></div></div>
+  <p class="small muted">Included: 4 expert hours per month on the Scale plan. Extra hours $190.</p></div>
+</section></div>`;
+
+V.queue = () => `
+<div class="page-head"><div><h1>Review queue</h1><p>Dana Ortiz, CPA · Intuit expert network · 11 reviews today</p></div>
+<div class="row"><span class="pill p-green">Median response 1h 50m</span></div></div>
+<div class="grid g4">
+  <div class="card pad kpi"><span class="label">Waiting</span><b>4</b><span class="small muted">Oldest: 38 min</span></div>
+  <div class="card pad kpi"><span class="label">Approved as is</span><b>82%</b><span class="small muted">Last 30 days</span></div>
+  <div class="card pad kpi"><span class="label">Corrections sent to agents</span><b>57</b><span class="small muted">Become new test cases</span></div>
+  <div class="card pad kpi"><span class="label">Earned this month</span><b>$6,420</b><span class="small muted">$45 per standard review</span></div>
+</div>
+<section class="card"><div class="table-wrap"><table>
+<tr><th>Company</th><th>Item</th><th>Agent</th><th>Why it came to you</th><th>Due</th></tr>
+<tr class="click" onclick="openReview()" id="review-row"><td><b>Harbor &amp; Pine Outdoor</b></td><td>Accrual for UK legal set-up fees, $38,500</td><td class="small">Accounting Agent</td><td><span class="pill p-amber">Confidence 71%</span></td><td class="num">1h 20m</td></tr>
+<tr><td><b>Castillo Builders</b></td><td>WIP adjustment, Project 118</td><td class="small">Construction WIP (partner)</td><td><span class="pill p-violet">New rule</span></td><td class="num">3h 05m</td></tr>
+<tr><td><b>Brightline Clinics</b></td><td>Q3 estimated tax, 3 states</td><td class="small">Sales Tax Agent</td><td><span class="pill p-violet">Tax filing</span></td><td class="num">5h 40m</td></tr>
+<tr><td><b>Meridian Freight</b></td><td>Covenant test, Q3 forecast</td><td class="small">Finance Agent</td><td><span class="pill p-red">Loan covenant</span></td><td class="num">6h 10m</td></tr>
+</table></div></section>
+<p class="note">Why this matters: each correction an expert makes is saved, with the developer's consent, as a test case. The agent must pass it before its next release. Competitors can copy an agent. They cannot copy thousands of CPAs checking real mid-market books every day.</p>`;
+
+V.demand = () => `
+<div class="page-head"><div><h1>Demand board</h1><p>Arjun Mehta · Ledgerline · What IES companies need and cannot find yet</p></div>
+<span class="small muted">Counts are anonymous and only shown when 50+ companies match</span></div>
+<div class="grid g2" id="demand-grid">
+  ${[
+   ["ASC 606 for usage-based pricing","1,140 companies flagged this quarter","61% have nothing installed","$1.9M","Growing fast","p-green",true],
+   ["UK VAT, Making Tax Digital","620 companies adding a UK entity in the next 6 months","Only 1 verified agent","$0.9M","Growing","p-green",false],
+   ["Canada GST/HST by province","410 companies","2 developers building","$0.5M","Crowding","p-amber",false],
+   ["Grant and fund accounting","148 requests from nonprofits","No agent listed","$0.3M","Early","p-grey",false]
+  ].map(d=>`<article class="card pad stack" style="${d[6]?'border-color:var(--blue)':''}">
+    <div class="row between wrap"><h3>${d[0]}</h3><span class="pill ${d[5]}">${d[4]}</span></div>
+    <p class="small sub">${d[1]}. ${d[2]}.</p>
+    <div class="row between"><div class="kpi"><span class="label">Est. yearly spend</span><b style="font-size:20px">${d[3]}</b></div>
+    ${d[6]?'<button class="btn primary sm" onclick="go(\'studio\')">Build for this</button>':'<button class="btn sm" onclick="toast(\'Saved to your watchlist\')">Watch</button>'}</div>
+  </article>`).join("")}
+</div>
+<section class="card pad stack small">
+  <h3>Where these numbers come from</h3>
+  <p class="sub">Growth Radar signals across IES companies, search terms in the store that returned no good match, and requests customers file. Intuit never shares company names or raw data.</p>
+</section>`;
+
+V.studio = () => `
+<div class="crumb"><a href="#demand">Demand board</a> / Agent Studio</div>
+<div class="page-head"><div><h1>Agent Studio</h1><p>RevFlow Agent v2.3 · Usage-based pricing support</p></div>
+<div class="steps"><div class="step done"><i>✓</i>Scaffold</div><div class="step-sep"></div><div class="step on"><i>2</i>Tools &amp; test</div><div class="step-sep"></div><div class="step"><i>3</i>Certify</div><div class="step-sep"></div><div class="step"><i>4</i>Publish</div></div></div>
+<div class="grid g2">
+  <section class="card pad stack">
+    <h3>IES tools your agent can call</h3>
+    <p class="small sub">Same tools Intuit's own agents use. Write tools only propose. The customer or an expert approves.</p>
+    ${[["ledger.read_transactions","Read",true],["invoices.read","Read",true],["contracts.read_terms","Read",true],["journal.propose_entry","Propose",true],["fx.get_rates","Read",false],["expert.request_review","Escalate",true]].map(t=>`
+    <label class="tool"><input type="checkbox" ${t[2]?'checked':''}> <span class="mono">${t[0]}</span><span class="pill ${t[1]==='Propose'?'p-amber':t[1]==='Escalate'?'p-violet':'p-green'}" style="margin-left:auto">${t[1]}</span></label>`).join("")}
+  </section>
+  <section class="card pad stack">
+    <h3>agent.yaml</h3>
+<div class="code"><span class="k">name</span>: revflow-agent
+<span class="k">version</span>: <span class="s">2.3.0</span>
+<span class="k">model</span>: <span class="s">intuit-finance-default</span>
+<span class="k">autonomy</span>:
+  <span class="k">max_level</span>: <span class="s">act_with_approval</span>
+  <span class="k">escalate_when</span>:
+    - confidence &lt; <span class="s">0.80</span>
+    - amount &gt; customer.materiality
+<span class="k">tools</span>: [ledger.read_transactions,
+  invoices.read, contracts.read_terms,
+  journal.propose_entry, expert.request_review]
+<span class="c"># every figure must cite a source record</span>
+<span class="k">require_citations</span>: <span class="s">true</span></div>
+  </section>
+</div>
+<section class="card pad stack" id="sandbox">
+  <div class="row between wrap"><div><h3>Test in the sandbox</h3><p class="small sub">Sandbox company: Summit Bikes (synthetic data, 3 entities, 18 months, 2,400 contracts)</p></div>
+  <button class="btn primary" onclick="runTest()">Run August close</button></div>
+  <div class="trace" id="trace">${S.testRun?traceDone():'<span class="muted">Press "Run August close" to see the agent work step by step.</span>'}</div>
+  ${S.testRun?'<div class="row"><button class="btn primary" onclick="go(\'certify\')">Send to certification</button></div>':''}
+</section>`;
+
+function traceDone(){return [
+ "04:00:01  read  contracts.read_terms       2,412 contracts loaded",
+ "04:00:03  read  invoices.read              3,980 invoices in August",
+ "04:00:07  calc  usage tiers applied        318 usage-based contracts",
+ "04:00:09  prop  journal.propose_entry      Dr 4000 Sales 402,118.40 / Cr 2400 Deferred rev",
+ "04:00:09  cite  3,980 source links attached",
+ "04:00:10  esc   expert.request_review      7 contracts with mid-term downgrade (conf 0.74)",
+ "04:00:10  done  1 entry proposed, 7 items to expert, 0 errors"].map(l=>`<div>${l}</div>`).join("")}
+
+V.certify = () => `
+<div class="crumb"><a href="#studio">Agent Studio</a> / Certification</div>
+<div class="page-head"><div><h1>Verified for Finance</h1><p>RevFlow Agent v2.3 · applying for Level 2 (acts with approval)</p></div>
+<span class="pill p-blue">Est. 4 business days left</span></div>
+<div class="grid g-main">
+<section class="card pad" id="cert-list">
+  ${[["Golden set accuracy","1,200 test contracts, incl. 57 from expert corrections","99.1%","pass mark 98%","g"],
+     ["Citations","Every figure links to a source record","100%","pass mark 100%","g"],
+     ["Stays in its lane","Refuses 40 out-of-scope requests, like posting payroll","40 / 40","","g"],
+     ["Adversarial prompts","Tries to post without approval or hide a number","0 breaches","","g"],
+     ["Security review","SOC 2 report, data residency, key rotation","Passed","","g"],
+     ["Expert panel","3 Intuit CPAs test 60 edge cases","2 of 3 done","","a"]].map(c=>`
+  <div class="check"><div class="tick" style="background:${c[4]==='g'?'var(--green)':'#E08A00'}">${c[4]==='g'?'✓':'…'}</div><div><b>${c[0]}</b><p class="small muted">${c[1]}</p></div><div style="text-align:right"><b class="num">${c[2]}</b><p class="small muted">${c[3]}</p></div></div>`).join("")}
+</section>
+<section class="stack">
+  <div class="card pad stack"><h3>Verification levels</h3>
+    <div class="small stack"><div><span class="pill p-blue">L1</span> Reads data and gives answers. No ledger changes.</div>
+    <div><span class="pill p-green">L2</span> Proposes entries. A person approves each one.</div>
+    <div><span class="pill p-violet">L3</span> Acts on its own under the customer's threshold. Needs 6 months at L2 with 99.5%+ live accuracy.</div></div></div>
+  <div class="card pad stack"><h3>After launch</h3><p class="small sub">Intuit keeps scoring live accuracy from customer approvals and expert reviews. If it drops below 98% for 7 days, the agent goes back to L1 automatically and you are told why.</p>
+  <button class="btn primary" onclick="go('earn')">Go to listing and pricing</button></div>
+</section></div>`;
+
+V.earn = () => `
+<div class="crumb"><a href="#certify">Certification</a> / Publish &amp; earn</div>
+<div class="page-head"><div><h1>Publish &amp; earn</h1><p>Ledgerline · RevFlow Agent</p></div>
+${S.published?'<span class="pill p-green">v2.3 live</span>':'<button class="btn primary" onclick="S.published=true;render();toast(\'v2.3 submitted. Goes live after expert panel sign-off.\')">Publish v2.3</button>'}</div>
+<div class="grid g4">
+  <div class="card pad kpi"><span class="label">Paying companies</span><b>212</b><span class="small muted">+38 this month</span></div>
+  <div class="card pad kpi"><span class="label">Monthly revenue</span><b>$184,300</b><span class="small muted">Gross, before Intuit share</span></div>
+  <div class="card pad kpi"><span class="label">You keep</span><b>85%</b><span class="small muted">On the first $1M a year, then 80%</span></div>
+  <div class="card pad kpi"><span class="label">Came from Radar</span><b>64%</b><span class="small muted">Of new installs</span></div>
+</div>
+<div class="grid g2">
+  <section class="card pad stack"><h3>Monthly revenue, last 6 months</h3>
+    <div class="bars">${[[62,"Mar"],[81,"Apr"],[104,"May"],[129,"Jun"],[152,"Jul"],[184,"Aug"]].map(b=>`<div><small class="num">$${b[0]}k</small><span class="b" style="height:${Math.round(b[0]/184*100)}px"></span><small>${b[1]}</small></div>`).join("")}</div>
+  </section>
+  <section class="card pad stack"><h3>Pricing options</h3>
+    <label class="tool"><input type="radio" name="price" id="pr1" checked> Per active contract <b style="margin-left:auto">$1.10 / month</b></label>
+    <label class="tool"><input type="radio" name="price" id="pr2"> Flat, up to 2,000 contracts <b style="margin-left:auto">$1,500 / month</b></label>
+    <label class="tool"><input type="radio" name="price" id="pr3"> Add expert set-up bundle <b style="margin-left:auto">+$1,800 once</b></label>
+    <p class="note">Intuit bills the customer on their IES invoice and pays you monthly. No separate contract for the customer to sign.</p>
+  </section>
+</div>`;
+
+/* ---------- Interactions ---------- */
+function turnOnAP(){S.apOn=true;toast("Two-step approval turned on for bills over $25k");render()}
+
+function openInstall(step){
+  step = step||1;
+  const L = $("#layer");
+  const stepper = ["Access","Autonomy","Shadow mode"].map((t,i)=>`<div class="step ${i+1<step?'done':i+1===step?'on':''}"><i>${i+1<step?'✓':i+1}</i>${t}</div>`).join('<div class="step-sep"></div>');
+  let body="";
+  if(step===1) body=`<p class="sub">RevFlow will read invoices, items and customers, and propose journal entries. It cannot see bank, payroll or HR data.</p>
+    <label class="tool"><input type="checkbox" checked disabled> Read invoices, items, customers</label>
+    <label class="tool"><input type="checkbox" checked disabled> Propose journal entries</label>
+    <label class="tool"><input type="checkbox" id="ent-uk" checked> Include UK entity when it goes live</label>`;
+  if(step===2) body=`<p class="sub">Choose how much RevFlow can do alone. You can change this any time.</p>
+    <div class="dial">
+      <button class="${S.dial==='suggest'?'on':''}" onclick="S.dial='suggest';openInstall(2)"><b>Suggest only</b><span>Shows schedules. You post entries yourself.</span></button>
+      <button class="${S.dial==='approve'?'on':''}" onclick="S.dial='approve';openInstall(2)"><b>Act with approval</b><span>Prepares entries. You approve each one.</span></button>
+      <button disabled style="opacity:.55"><b>Act on its own</b><span>Available after 90 days at 99.5% accuracy in your books.</span></button>
+    </div>
+    <label class="tool"><input type="checkbox" id="exp-rev" checked> Send anything under 80% confidence to Dana Ortiz, CPA</label>`;
+  if(step===3) body=`<p class="sub">For the next 14 days RevFlow works next to your current process. It prepares August entries, and Radar compares them with what your team books. Nothing posts.</p>
+    <div class="grid g2 small"><div class="card pad stack" style="box-shadow:none"><span class="label">Cost during trial</span><b>$0</b></div><div class="card pad stack" style="box-shadow:none"><span class="label">After trial</span><b>about $1,412 / month</b></div></div>
+    <p class="note">You get a match report on day 14. If RevFlow and your team differ by more than 0.5%, Dana reviews the gap with you before you decide.</p>`;
+  L.innerHTML = `<div class="modal-wrap" onclick="if(event.target===this)closeLayer()"><div class="modal" role="dialog" aria-label="Install RevFlow">
+    <div class="row between"><h2>Try RevFlow in shadow mode</h2><button class="x" onclick="closeLayer()" aria-label="Close">×</button></div>
+    <div class="steps">${stepper}</div>${body}
+    <div class="row" style="justify-content:flex-end">${step>1?`<button class="btn" onclick="openInstall(${step-1})">Back</button>`:''}
+    ${step<3?`<button class="btn primary" onclick="openInstall(${step+1})">Continue</button>`:`<button class="btn primary" onclick="finishInstall()">Start shadow mode</button>`}</div>
+  </div></div>`;
+}
+function finishInstall(){S.installed=true;closeLayer();toast("RevFlow is running in shadow mode");go("close")}
+function closeLayer(){$("#layer").innerHTML=""}
+
+function openTask(id){
+  const c = CLOSE.find(x=>x.id===id);
+  let detail = "";
+  if(id==="c3") detail = `
+    <div class="reason"><span class="ai-chip">${SPARK} Why RevFlow proposed this</span>
+    <p class="small">1,284 active subscription contracts. August billings of $618,900. $412,300 relates to months after August, so it moves to Deferred revenue. 3 contracts changed plan mid-month and were prorated by day.</p></div>
+    <div class="table-wrap"><table class="je"><tr><th>Account</th><th class="num">Debit</th><th class="num">Credit</th></tr>
+    <tr><td>4000 Sales, US</td><td class="num">318,400.00</td><td></td></tr><tr><td>4000 Sales, CA</td><td class="num">93,900.00</td><td></td></tr>
+    <tr><td>2400 Deferred revenue</td><td></td><td class="num">412,300.00</td></tr></table></div>
+    <div class="stack small"><div class="src">${ico("close")} 1,284 invoices linked <a href="#" onclick="event.preventDefault();toast('Opens the source list')" style="margin-left:auto">View</a></div>
+    <div class="src">${ico("cert")} Matches your team's manual estimate within 0.3% <span class="pill p-green" style="margin-left:auto">Shadow check</span></div></div>`;
+  else if(id==="c4") detail = `
+    <div class="reason"><span class="ai-chip">${SPARK} Why this went to an expert</span>
+    <p class="small">The agent found a $38,500 engagement letter from a UK law firm but no invoice yet. It is 71% sure this should be accrued in August. UK entity is not live, so the entity to book it in is unclear.</p></div>
+    <div class="row"><div class="avatar" style="background:#108043">DO</div><div><b>Dana Ortiz, CPA is reviewing</b><p class="small muted">Picked up 22 min ago. Expected by 11:30.</p></div></div>`;
+  else detail = `<p class="sub">${c.status==='done'?'Finished overnight. Full log and source links are saved for your auditor.':'Waiting on your team.'}</p>`;
+  $("#layer").innerHTML = `<div class="scrim" onclick="if(event.target===this)closeLayer()"><aside class="drawer" aria-label="Task detail">
+    <div class="row between"><span class="label">${c.agent} · ${c.by}</span><button class="x" onclick="closeLayer()" aria-label="Close">×</button></div>
+    <h2>${c.task}</h2><div class="row wrap">${pillFor(c.status)}<span class="pill p-grey">${modeLabel(c.mode)}</span>${c.conf?`<span class="pill p-grey">Confidence ${c.conf}%</span>`:''}</div>
+    ${detail}
+    ${c.status==='review'?`<div class="row"><button class="btn primary" onclick="approve('${c.id}')">Approve and post</button><button class="btn" onclick="toast('Opens the entry for editing')">Edit</button><button class="btn ghost" onclick="toExpert('${c.id}')">Send to expert</button></div>`:''}
+  </aside></div>`;
+}
+function approve(id){const c=CLOSE.find(x=>x.id===id);c.status="approved";closeLayer();toast("Posted. Logged with your approval and 1,284 source links.");render()}
+function toExpert(id){const c=CLOSE.find(x=>x.id===id);c.status="expert";c.mode="expert";closeLayer();toast("Sent to Dana Ortiz, CPA");render()}
+
+function openReview(){
+  $("#layer").innerHTML = `<div class="scrim" onclick="if(event.target===this)closeLayer()"><aside class="drawer" aria-label="Review">
+    <div class="row between"><span class="label">Harbor &amp; Pine Outdoor · Accounting Agent</span><button class="x" onclick="closeLayer()" aria-label="Close">×</button></div>
+    <h2>Accrual for UK legal set-up fees</h2>
+    <div class="reason"><span class="ai-chip">${SPARK} Agent's proposal, confidence 71%</span><p class="small">Accrue $38,500 in the US entity in August, based on a signed engagement letter dated 4 Aug.</p></div>
+    <div class="stack"><span class="label">Your decision</span>
+      <label class="tool"><input type="radio" name="dec" id="d1"> Approve as proposed</label>
+      <label class="tool"><input type="radio" name="dec" id="d2" checked> Change it</label></div>
+    <div class="card pad stack" style="box-shadow:none"><span class="label">Your change</span>
+      <p class="small">Accrue only the $12,000 of work done in August. Book it in the US entity as a pre-formation cost, then move it to the UK entity when it goes live.</p></div>
+    <label class="tool"><input type="checkbox" id="d3" checked> Save as a test case for this agent</label>
+    <div class="row"><button class="btn primary" onclick="closeLayer();toast('Sent to Maya with your note. Test case saved.')">Send to client</button></div>
+  </aside></div>`;
+}
+
+const CHAT = [
+ {r:"me",t:"If we recognize subscription revenue over time, what happens to Q3 EBITDA and our bank covenant?"},
+ {r:"ai",t:`Q3 revenue would drop by about $1.37M, from $16.8M to $15.4M. Q3 EBITDA would fall from $2.02M to $0.65M.<br><br>Your loan with First Coast Bank requires a trailing 12-month debt to EBITDA ratio under 3.0. Today it is 2.4. After the change it would be <b>2.9</b>, close to the limit.<br><br><span class="small muted">Sources: Q3 P&amp;L, RevFlow shadow schedules, loan agreement section 7.2</span>`,conf:"86%"},
+ {r:"ai",t:`This touches a loan covenant, so I'd like an Intuit expert to check it before you act. Dana Ortiz, CPA knows your books. Want me to send her this thread?`,handoff:true},
+ {r:"hu",t:`Hi Maya, Dana here. The numbers are right. Two things: the change is a correction of an error, so talk to your auditor about restating prior quarters. And banks usually agree to adjust the covenant for an accounting change like this. I can draft the letter to First Coast today.`}
+];
+function renderChat(){
+  const box=$("#chat"); if(!box) return;
+  box.innerHTML = CHAT.slice(0,S.chatStage).map(m=>`<div class="msg ${m.r}"><span class="who">${m.r==='me'?'Maya Chen':m.r==='ai'?'Intuit Intelligence':'Dana Ortiz, CPA · Intuit expert'}</span><div>${m.t}</div>
+   ${m.conf?`<div class="row small"><span class="pill p-green">Confidence ${m.conf}</span><span class="pill p-grey">3 sources</span></div>`:''}
+   ${m.handoff&&S.chatStage===3?`<div class="row"><button class="btn primary sm" onclick="handoff()">Send to Dana</button><button class="btn sm" onclick="toast('Kept as AI answer only')">Not now</button></div>`:''}</div>`).join("")
+   + (S.typing?`<div class="msg ai"><span class="typing"><i></i><i></i><i></i></span></div>`:"")
+   + (S.chatStage===0?`<p class="muted small" style="text-align:center">Press Ask to see the conversation.</p>`:"");
+}
+function sendChat(){ if(S.chatStage>0) return; S.chatStage=1; renderChat(); S.typing=true; renderChat();
+  setTimeout(()=>{S.typing=false;S.chatStage=3;renderChat()},900); }
+function handoff(){S.chatStage=3.5;S.typing=true;renderChat();setTimeout(()=>{S.typing=false;S.chatStage=4;renderChat()},1100)}
+
+function runTest(){ const t=$("#trace"); t.innerHTML=""; const lines=traceDone().split("</div>").filter(Boolean);
+  lines.forEach((l,i)=>setTimeout(()=>{t.insertAdjacentHTML("beforeend",l+"</div>"); if(i===lines.length-1){S.testRun=true;setTimeout(render,500)}},i*260)); }
+
+/* ---------- Tour ---------- */
+const TOUR = [
+ {r:"home",el:"#home-radar",t:"1. The problem, inside the product",p:"Maya is CFO of a $64M company. IES wins companies like hers early, then loses them when things get complex. Growth Radar spots that complexity months before it becomes a reason to leave."},
+ {r:"signal",el:"#fix-options",t:"2. A signal with evidence",p:"Radar found subscription revenue booked the wrong way, with the invoices and audit note to prove it. It offers the lightest fix first: a native setting, a verified agent, or an Intuit expert."},
+ {r:"store",el:"#store-grid",t:"3. The Agent & App Store",p:"Maya describes her problem in plain words. Agents are ranked by fit with her actual books and show their Intuit verification level."},
+ {r:"agent",el:"#trust-panel",t:"4. Trust before install",p:"Every agent shows test results, live accuracy and exactly what data it can touch. Write access is always 'propose only' until a person approves."},
+ {r:"agent",el:"#install-btn",t:"5. Shadow mode and the autonomy dial",p:"Click 'Try in shadow mode'. Maya picks how much the agent can do alone. For 14 days it runs next to her team and nothing posts."},
+ {r:"close",el:"#close-table",t:"6. Month-end close with agents",p:"Agents did the routine work overnight. Open the RevFlow row to see its reasoning and sources, then approve. Open the UK accrual row to see a hand-off to an expert."},
+ {r:"advisor",el:"#chat",t:"7. AI advisor with a human behind it",p:"Press Ask. The AI answers from Maya's books, then hands off to a CPA because the answer touches a loan covenant."},
+ {r:"queue",el:"#review-row",t:"8. The expert's side",p:"Dana reviews what agents are unsure about. Her corrections become test cases. This is the moat: agents get better because real CPAs check them."},
+ {r:"demand",el:"#demand-grid",t:"9. The developer's side starts with demand",p:"Arjun, an ISV founder, sees anonymous demand from Radar and empty store searches. He builds what IES customers are about to need."},
+ {r:"studio",el:"#sandbox",t:"10. Build and test in a sandbox",p:"Same IES tools Intuit's agents use, a synthetic 3-entity company, and a step-by-step trace. Press 'Run August close'."},
+ {r:"certify",el:"#cert-list",t:"11. Verified for Finance",p:"Accuracy, citations, safety and an expert panel. An agent earns more autonomy over time, and loses it automatically if live accuracy drops."},
+ {r:"earn",el:null,t:"12. Publish and earn",p:"Intuit bills the customer and pays the developer. 64% of new installs came from Radar. That is the loop: customers stay, developers earn, experts keep it safe."}
+];
+function renderTour(){
+  const slot=$("#tour-slot");
+  document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));
+  if(!S.tourOn){ slot.innerHTML=`<button class="tour-min" onclick="startTour()">Guided tour (12 steps)</button>`; return; }
+  const st=TOUR[S.tourStep];
+  slot.innerHTML=`<div class="tour" role="dialog" aria-label="Guided tour"><div class="row between"><span class="label" style="color:#93A2C6">Guided tour · ${S.tourStep+1} of ${TOUR.length}</span></div>
+   <h4>${st.t}</h4><p>${st.p}</p><div class="tour-prog"><i style="width:${(S.tourStep+1)/TOUR.length*100}%"></i></div>
+   <div class="row">${S.tourStep>0?'<button class="prev" onclick="tourGo(-1)">Back</button>':''}<button class="next" onclick="tourGo(1)">${S.tourStep===TOUR.length-1?'Finish':'Next'}</button><button class="skip" onclick="endTour()">Explore on my own</button></div></div>`;
+  if(st.el){const e=$(st.el); if(e) e.classList.add("hl");}
+}
+function tourGo(d){ const n=S.tourStep+d; if(n>=TOUR.length){endTour();return} if(n<0) return; S.tourStep=n; const r=TOUR[n].r; if(location.hash.slice(1)!==r) location.hash=r; else render(); }
+function endTour(){S.tourOn=false;try{localStorage.setItem("hr-tour","off")}catch(e){} renderTour()}
+function startTour(){S.tourOn=true;S.tourStep=0;try{localStorage.removeItem("hr-tour")}catch(e){} if(location.hash.slice(1)!=="home") location.hash="home"; else render()}
+
+/* ---------- Render ---------- */
+function renderSide(route){
+  const role=ROLE_OF[route]||"cfo"; const nv=NAV[role];
+  const labels={cfo:"Harbor & Pine Outdoor",expert:"Intuit expert network",dev:"Developer console"};
+  const activeMap={signal:"radar",agent:"store"};
+  const act=activeMap[route]||route;
+  $("#side").innerHTML = `<div class="brand"><div class="brand-mark">H</div><div><b>Headroom</b><small>Intuit Enterprise Suite</small></div></div>
+   <div class="nav-group"><div class="nav-label">${labels[role]}</div>
+   ${nv.items.map(i=>`<a class="nav-item ${act===i[0]?'active':''}" href="#${i[0]}">${ico(i[2])}<span>${i[1]}</span>${i[3]&&!S.installed?'<span class="dot" title="1 urgent signal"></span>':''}</a>`).join("")}</div>
+   <div class="side-foot">Prototype for the Intuit PM case study. Sample data only.</div>`;
+  document.querySelectorAll(".role-switch button").forEach(b=>b.classList.toggle("on",b.dataset.role===role));
+  const w=$("#who"); w.textContent=nv.who; w.style.background=nv.color;
+}
+function render(){
+  let r=location.hash.slice(1)||"home"; if(!V[r]) r="home";
+  renderSide(r);
+  $("#page").innerHTML=V[r]();
+  if(r==="advisor") renderChat();
+  window.scrollTo(0,0);
+  renderTour();
+}
+document.querySelectorAll(".role-switch button").forEach(b=>b.addEventListener("click",()=>go({cfo:"home",expert:"queue",dev:"demand"}[b.dataset.role])));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeLayer()});
+window.addEventListener("hashchange",()=>{closeLayer();render()});
+render();
+</script>
+</body>
+</html>

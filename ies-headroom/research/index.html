@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Headroom Research Notes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,700;6..12,800&display=swap">
+<style>
+:root{--blue:#236CFF;--navy:#0D1B3E;--ink:#1F2433;--ink-2:#4A5163;--ink-3:#6E7587;--line:#E1E5EE;--bg:#F5F7FB;--card:#FFFFFF;--tint:#EEF3FF;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--blue:#7FA8FF;--navy:#E6ECFA;--ink:#D7DDEA;--ink-2:#AEB7CB;--ink-3:#8C95AA;--line:#2A3350;--bg:#0B1226;--card:#121B34;--tint:#17244A;color-scheme:dark}}
+:root[data-theme="dark"]{--blue:#7FA8FF;--navy:#E6ECFA;--ink:#D7DDEA;--ink-2:#AEB7CB;--ink-3:#8C95AA;--line:#2A3350;--bg:#0B1226;--card:#121B34;--tint:#17244A;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.6;padding-inline:16px;padding-block:32px 64px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{color:var(--navy);margin:0;text-wrap:balance;line-height:1.25}
+h1{font-size:30px;font-weight:800}
+h2{font-size:20px;font-weight:800}
+h3{font-size:15.5px}
+p{margin:0}
+.lede{color:var(--ink-2);font-size:16.5px;max-width:65ch}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.label{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--ink-3)}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+a{color:var(--blue)}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.prompt{background:var(--tint);border-radius:8px;padding:12px 14px;font-size:14px}
+.prompt b{color:var(--navy)}
+.muted{color:var(--ink-3);font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header style="display:flex;flex-direction:column;gap:8px">
+  <span class="label">Headroom for Intuit Enterprise Suite</span>
+  <h1>Research notes and AI process</h1>
+  <p class="lede">The evidence behind the problem statement, what Intuit and competitors have already shipped, the assumptions I made, and how I used AI tools along the way.</p>
+</header>
+
+<section>
+  <h2>1. What the research says</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Finding</th><th>Why it matters</th><th>Source</th></tr>
+    <tr><td>IES targets businesses with roughly $5M to $250M in revenue and can manage 200+ entities.</td><td>IES is already built for the complexity. The gap is timing and ecosystem, not core capability.</td><td><a href="https://www.certumsolutions.com/library/intuit-enterprise-suite-overview">Certum Solutions overview</a>, <a href="https://quickbooks.intuit.com/r/news/intuit-enterprise-suite-new-era-of-growth/">Intuit launch news</a></td></tr>
+    <tr><td>Multi-entity consolidation is the most cited reason companies outgrow QuickBooks-class tools. ASC 606 revenue recognition is next.</td><td>These are predictable triggers. They show up in the books months before a company starts shopping.</td><td><a href="https://epiqinfo.com/quickbooks-to-netsuite-migration/">Epiq migration guide</a>, <a href="https://www.zoneandco.com/articles/netsuite-vs-quickbooks">Zone &amp; Co</a></td></tr>
+    <tr><td>Companies usually switch between about $10M and $50M in revenue.</td><td>This is the band where IES should be winning and keeping customers.</td><td><a href="https://www.dualentry.com/blog/netsuite-vs-quickbooks">DualEntry</a></td></tr>
+    <tr><td>Half of finance teams take 6+ business days to close. Only 18% close in 3 days or less.</td><td>Close is the most visible pain and the easiest place to prove agents save time.</td><td><a href="https://www.ledge.co/content/month-end-close-benchmarks-for-2025">Ledge 2025 benchmarks</a></td></tr>
+    <tr><td>Manual reconciliation takes 30% to 40% of close time.</td><td>Agents should start with reconciliation and schedules, where rules are clear.</td><td><a href="https://www.velixo.com/the-anatomy-of-a-mid-market-close-where-the-days-really-go/">Velixo</a></td></tr>
+    <tr><td>Typical mid-market SaaS logo churn is 7% to 12% a year. Median gross revenue retention is about 92%.</td><td>Used as the baseline for retention targets.</td><td><a href="https://meltingspot.io/en/blog/saas-b2b-churn-rate-benchmark">MeltingSpot</a>, <a href="https://www.saas-capital.com/blog-posts/what-is-a-good-retention-rate-for-a-private-saas-company/">SaaS Capital</a></td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>2. What Intuit has already shipped</h2>
+  <p>I checked this first so the pitch builds on Intuit's work and does not repeat it.</p>
+  <ul>
+    <li><b>July 2025:</b> AI agents in QuickBooks and IES (Accounting, Finance, Payments and others), with human experts built into the experience. <a href="https://quickbooks.intuit.com/r/news/new-agentic-ai-experiences/">Source</a></li>
+    <li><b>July 2025:</b> App Partner Program with tiered platform fees for developers. <a href="https://report.woodard.com/articles/intuits-app-partner-program-marks-new-phase-in-developer-ecosystem-fpwr">Source</a></li>
+    <li><b>February 2026:</b> Intuit and Anthropic partnership. Businesses can build custom agents on IES with the Claude Agent SDK. <a href="https://www.pymnts.com/partnerships/2026/intuit-and-anthropic-to-launch-customizable-ai-agents/">Source</a></li>
+    <li><b>May 2026:</b> Spring release with multi-entity close automation, intercompany eliminations, a dimensions API and HCM. <a href="https://www.intuit.com/enterprise/blog/product-update/spring-2026-intuit-enterprise-suite-release-notes/">Source</a></li>
+    <li><b>August 2026:</b> Intuit Intelligence Chat for CFOs across entities. <a href="https://www.businesswire.com/news/home/20260812465052/en/Intuit-Advances-Its-Mid-Market-Platform-With-Conversational-AI-Enterprise-Scale-and-Deep-Industry-Workflows-for-CFOs-and-Accounting-Firms">Source</a></li>
+  </ul>
+  <p><b>What is still missing:</b> nothing warns a customer that they are about to outgrow their setup, there is no verified store for third-party agents that can write to the ledger, and developers have no view of what IES customers need next. Headroom fills those three gaps.</p>
+</section>
+
+<section>
+  <h2>3. Competitors</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Who</th><th>Strength</th><th>Gap Headroom uses</th></tr>
+    <tr><td>Oracle NetSuite</td><td>43,000+ customers. Launched the SuiteApp.AI marketplace and NetSuite Next agents in 2025.</td><td>Long, partner-led implementations. Customers arrive after the pain, not before it.</td></tr>
+    <tr><td>SAP Business ByDesign</td><td>Full ERP from a trusted brand.</td><td>Heavy for companies under $100M. Small partner ecosystem for this segment.</td></tr>
+    <tr><td>Workday</td><td>Strong finance and HR for large companies.</td><td>Price and set-up effort are high for the lower mid-market.</td></tr>
+    <tr><td>AI-native ledgers (e.g. Rillet, Campfire, DualEntry)</td><td>Fast, modern, AI-first close.</td><td>Thin app ecosystem, no expert network, no payroll or payments.</td></tr>
+  </table></div>
+  <p class="muted"><a href="https://www.arnnet.com.au/article/4068529/netsuite-launches-suiteapp-ai-marketplace-updates-partner-program.html">NetSuite SuiteApp.AI source</a>, <a href="https://www.getgsi.com/blog/suiteworld-2025-highlights">SuiteWorld 2025 highlights</a></p>
+</section>
+
+<section>
+  <h2>4. Assumptions</h2>
+  <p>Intuit does not publish these numbers, so I made estimates and list them here so they can be challenged.</p>
+  <ul>
+    <li>IES has about 20,000 paying companies by 2027, with average revenue of about $25,000 per company per year.</li>
+    <li>About 30% of IES companies hit at least one major complexity trigger each year (new entity, new currency, new revenue model, audit).</li>
+    <li>Companies that hit a trigger churn at about 20% a year, roughly twice the mid-market benchmark.</li>
+    <li>Headroom can cut that to 12% within two years.</li>
+    <li>30% of IES companies install at least one paid agent by year 3, with 1.5 agents each at about $9,000 a year.</li>
+    <li>Intuit experts can complete a standard review in about 15 minutes, which makes a $45 review fee work for the expert.</li>
+    <li>All company, person and agent names in the prototype are made up.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>5. How I used AI</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Stage</th><th>Tool</th><th>What I did</th></tr>
+    <tr><td>Empathize</td><td>Claude with web search</td><td>Collected reasons companies leave QuickBooks-class tools, close-time benchmarks and churn benchmarks. Checked every number against its source page.</td></tr>
+    <tr><td>Define</td><td>Claude</td><td>Stress-tested my problem statement against the case brief and mentor notes. Rewrote it in plain words.</td></tr>
+    <tr><td>Ideate</td><td>Claude</td><td>Used as a sparring partner to find holes in my 8 ideas and to check which ones Intuit has already built.</td></tr>
+    <tr><td>Prototype</td><td>Claude Code</td><td>Built the clickable HTML prototype in the Intuit palette, then tested every screen at desktop and phone width.</td></tr>
+    <tr><td>Experiment</td><td>Claude</td><td>Listed the riskiest assumptions and designed the cheapest test for each.</td></tr>
+  </table></div>
+  <h3>Key prompts</h3>
+  <div class="prompt"><b>Research:</b> "Why do companies switch from QuickBooks to NetSuite? Rank the reasons and give me the revenue band where it usually happens. Cite sources."</div>
+  <div class="prompt"><b>Avoiding repeats:</b> "List every AI agent, marketplace and developer feature Intuit announced for IES from 2024 to 2026 with dates."</div>
+  <div class="prompt"><b>Critique:</b> "Here is my idea list and RICE scores. Argue against my top pick as a skeptical Intuit VP would."</div>
+  <div class="prompt"><b>Prototype:</b> "Build a clickable prototype of an IES screen that warns a CFO they are about to outgrow their setup. Use Intuit blue, show the evidence, and offer three fixes from lightest to heaviest."</div>
+  <h3>What I rejected and why</h3>
+  <ul>
+    <li><b>An AI CFO chatbot as the main idea.</b> Intuit shipped Intuit Intelligence Chat in August 2026.</li>
+    <li><b>Letting agents post entries on their own from day one.</b> A CFO signs off on every number, so autonomy has to be earned one agent at a time.</li>
+    <li><b>AI-suggested app names and quotes.</b> First drafts sounded generic. Rewritten to be specific to mid-market finance.</li>
+    <li><b>A 30% store commission.</b> Too high to pull developers away from NetSuite. I used 15% on the first $1M.</li>
+  </ul>
+</section>
+</div>
+</body>
+</html>
