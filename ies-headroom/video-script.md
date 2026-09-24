@@ -1,58 +1,51 @@
 # Headroom: video script
 
-**Length:** about 2 minutes 55 seconds (roughly 430 spoken words at a calm pace)
-**Format:** screen recording of the prototype with your voice over it. Your face in a small corner bubble for the opening and closing is a nice touch but optional.
-**Before recording:** open the prototype, click "Explore on my own" to hide the tour box, and set the browser to 1440 x 900.
+**Length:** about 2 minutes 50 seconds (roughly 420 words at a calm pace)
+**Format:** you talking to the camera. No slides or screen sharing needed. The script works on its own.
 
 ---
 
-## 0:00 to 0:20 | The problem
+## 1. Who I am and what I built (0:00 to 0:20)
 
-**On screen:** Deck slide 2, then cut to the prototype home screen.
+> Hi, I'm Udbhav. For this case I built Headroom, a product idea for Intuit Enterprise Suite. My submission has three parts: a clickable prototype you can explore with a built-in guided tour, a ten-slide deck, and a research page with my sources and assumptions. In the next three minutes I'll explain the problem, what I built, and the choices I'd like you to look at closely.
 
-> Hi, I'm Udbhav. Intuit Enterprise Suite wins companies while they're simple. Then they grow. They add a second entity, start selling subscriptions, open an office abroad. That work ends up in spreadsheets, and a few months later the CFO decides the only way out is NetSuite. IES loses the customer right when they're worth the most.
+## 2. The problem (0:20 to 0:55)
 
-## 0:20 to 0:40 | The research
+> IES is good at winning growing companies. The problem comes a bit later. As a company grows, it opens a second entity, starts selling subscriptions, or expands abroad. Each of these brings new accounting work. The finance team handles it in spreadsheets for a while, and then the CFO decides they need a bigger system like NetSuite. So IES loses customers right when they're worth the most.
+>
+> My research showed this usually happens between ten and fifty million dollars in revenue. The two most common triggers are consolidating several entities and new revenue rules for subscriptions.
 
-**On screen:** Research page, scroll slowly past the findings table.
+## 3. What Headroom does (0:55 to 1:50)
 
-> I used Claude with web search to find out why companies leave. Two reasons came up again and again: consolidating several entities, and new revenue rules like ASC 606. Most companies switch between 10 and 50 million dollars in revenue. I also checked what Intuit had already shipped, so I dropped my AI chat idea once I saw Intuit launched Intelligence Chat in August.
+> Headroom has four parts.
+>
+> First, Growth Radar. It checks a company's books every night and warns the CFO before they outgrow their setup. In the prototype, it catches subscription revenue booked the wrong way, shows the evidence, and suggests the simplest fix first.
+>
+> Second, a store of AI agents built by outside developers and tested by Intuit. The CFO can see each agent's accuracy and exactly what data it can touch before installing it.
+>
+> Third, trust controls. A new agent starts in shadow mode. It works next to the finance team for two weeks and nothing is posted until the CFO approves. For high-stakes work, like tax or a bank loan condition, an Intuit accountant reviews it.
+>
+> Fourth, the developer side. Developers see what customers need but can't find yet, build and test their agent in a sandbox, and get paid through Intuit.
 
-## 0:40 to 1:05 | Growth Radar
+## 4. What I'd like you to notice (1:50 to 2:35)
 
-**On screen:** Home, then click "See options" on the subscription signal. Hover over the three evidence rows.
+> A few choices were deliberate.
+>
+> Agents have to earn their freedom. They start with approval-only access and only get more once they prove their accuracy. If accuracy drops, they lose it automatically.
+>
+> Every correction an Intuit expert makes becomes a new test for that agent. I think this is Intuit's real advantage. Competitors can copy an agent, but they can't copy thousands of accountants already working inside customers' books.
+>
+> I also checked what Intuit has already launched. I dropped my first idea, an AI chat assistant for CFOs, because Intuit released one in August.
 
-> So I built Headroom. Meet Maya, CFO of a 64 million dollar outdoor brand. Growth Radar reads her books every night and warns her before she outgrows her setup. Here it caught subscription revenue booked in full on the day of sale. It shows the proof: the invoices, the audit note, the trend. And it offers the lightest fix first.
+## 5. How I worked and what I'd test first (2:35 to 2:50)
 
-## 1:05 to 1:35 | The store and trust
-
-**On screen:** Click "Compare agents", open RevFlow, point at the check results. Click "Try in shadow mode" and walk through the three steps, pausing on the autonomy choice.
-
-> The store ranks agents by how well they fit her actual data. Before she installs anything, she sees Intuit's test results, live accuracy, and exactly what the agent can touch. Then she picks how much it can do alone. New agents always start in shadow mode, working next to her team for two weeks. Nothing posts until she says so.
-
-## 1:35 to 2:00 | Close and the human expert
-
-**On screen:** Month-end close. Open the RevFlow row, show the reasoning and sources, click Approve. Then go to "Ask an advisor", press Ask, then "Send to Dana".
-
-> At month-end, agents do the routine work overnight. Maya approves the revenue entry with every source attached. When a question touches her bank covenant, the AI answers from her books and then hands it to Dana, an Intuit CPA. That hand-off is the point. The AI does the work, and a person signs off when the stakes are high.
-
-## 2:00 to 2:30 | The developer side
-
-**On screen:** Switch to "Developer". Demand board, click "Build for this", press "Run August close" and let the trace play. Then Certification.
-
-> On the other side is Arjun, who runs a small software company. His biggest problem is knowing what to build. The demand board shows him what IES customers need, based on Radar signals and empty searches. He builds with the same tools Intuit's agents use, tests on a fake three-entity company, and gets verified. If his agent's accuracy drops, it loses its permissions automatically.
-
-## 2:30 to 2:55 | Why it works and how I built it
-
-**On screen:** Publish and earn screen, then deck slide 7, then slide 9.
-
-> Every expert correction becomes a new test for the agent, so agents on IES keep getting better. Competitors can copy an agent. They can't copy thousands of CPAs already working inside customers' books. I built the prototype with Claude Code, and used Claude to question my RICE scores and find my weakest assumptions. The first thing I'd test is whether CFOs act on a Radar warning at all. Thanks for watching.
+> I used Claude for research and to build the prototype, and I checked every number against its source. The first thing I'd test is whether CFOs actually act on a Radar warning. Thanks for watching.
 
 ---
 
 ## Recording tips
 
-- Speak slower than feels natural. 430 words in 3 minutes leaves room to breathe.
-- Move the mouse to what you are talking about, then stop moving it while you talk.
-- Record each section as its own clip. It is much easier to redo 25 seconds than 3 minutes.
-- If you run long, cut the second half of the research section first.
+- Speak slower than feels natural. 420 words in three minutes leaves room to breathe.
+- Keep the script next to the camera, not below it, so you look at the lens.
+- Record each section as its own clip. It is much easier to redo 30 seconds than three minutes.
+- If you run long, shorten section 4 first.
