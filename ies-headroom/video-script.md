@@ -1,6 +1,6 @@
 # Headroom: video script
 
-**Length:** about 2 minutes 50 seconds (roughly 420 words at a calm pace)
+**Length:** just under 3 minutes (about 445 words at a steady pace)
 **Format:** you talking to the camera. No slides or screen sharing needed. The script works on its own.
 
 ---
@@ -45,7 +45,7 @@
 
 ## Recording tips
 
-- Speak slower than feels natural. 420 words in three minutes leaves room to breathe.
+- Speak slower than feels natural. 445 words fits in three minutes if you keep a steady pace.
 - Keep the script next to the camera, not below it, so you look at the lens.
 - Record each section as its own clip. It is much easier to redo 30 seconds than three minutes.
 - If you run long, shorten section 4 first.
