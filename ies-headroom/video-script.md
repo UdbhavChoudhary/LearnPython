@@ -1,51 +1,49 @@
 # Headroom: video script
 
-**Length:** just under 3 minutes (about 445 words at a steady pace)
+**Length:** just under 3 minutes (about 450 words at a steady pace)
 **Format:** you talking to the camera. No slides or screen sharing needed. The script works on its own.
 
 ---
 
-## 1. Who I am and what I built (0:00 to 0:20)
+## 1. Who I am and what I built (0:00 to 0:15)
 
-> Hi, I'm Udbhav. For this case I built Headroom, a product idea for Intuit Enterprise Suite. My submission has three parts: a clickable prototype you can explore with a built-in guided tour, a ten-slide deck, and a research page with my sources and assumptions. In the next three minutes I'll explain the problem, what I built, and the choices I'd like you to look at closely.
+> Hi, I'm Udbhav. For this case I built Headroom, a product idea for Intuit Enterprise Suite. My submission has a clickable prototype with a guided tour, a ten-slide deck, and a research page with my sources and assumptions.
 
-## 2. The problem (0:20 to 0:55)
+## 2. The problem (0:15 to 0:40)
 
-> IES is good at winning growing companies. The problem comes a bit later. As a company grows, it opens a second entity, starts selling subscriptions, or expands abroad. Each of these brings new accounting work. The finance team handles it in spreadsheets for a while, and then the CFO decides they need a bigger system like NetSuite. So IES loses customers right when they're worth the most.
+> IES is good at winning growing companies. The trouble comes later. As a company grows, it opens a second entity, starts selling subscriptions, or expands abroad. The finance team handles that in spreadsheets for a while, and then the CFO moves to a bigger system like NetSuite. IES loses customers right when they're worth the most, usually between ten and fifty million dollars in revenue.
+
+## 3. What Headroom does (0:40 to 1:25)
+
+> Headroom has four parts. Growth Radar checks a company's books every night and warns the CFO before they outgrow their setup. It shows the evidence and suggests the simplest fix first.
 >
-> My research showed this usually happens between ten and fifty million dollars in revenue. The two most common triggers are consolidating several entities and new revenue rules for subscriptions.
+> A store of AI agents, built by outside developers and tested by Intuit, gives companies the extra capability they need to stay.
+>
+> Trust controls keep the CFO in charge. New agents start in shadow mode and post nothing without approval. High-stakes work, like tax or a loan condition, goes to an Intuit accountant.
+>
+> And developers see what customers need but can't find yet, so they build the right things.
 
-## 3. What Headroom does (0:55 to 1:50)
+## 4. What I'd like you to notice (1:25 to 1:45)
 
-> Headroom has four parts.
->
-> First, Growth Radar. It checks a company's books every night and warns the CFO before they outgrow their setup. In the prototype, it catches subscription revenue booked the wrong way, shows the evidence, and suggests the simplest fix first.
->
-> Second, a store of AI agents built by outside developers and tested by Intuit. The CFO can see each agent's accuracy and exactly what data it can touch before installing it.
->
-> Third, trust controls. A new agent starts in shadow mode. It works next to the finance team for two weeks and nothing is posted until the CFO approves. For high-stakes work, like tax or a bank loan condition, an Intuit accountant reviews it.
->
-> Fourth, the developer side. Developers see what customers need but can't find yet, build and test their agent in a sandbox, and get paid through Intuit.
+> Agents earn their freedom. They start approval-only, and lose access automatically if accuracy drops. And every correction an Intuit expert makes becomes a new test for that agent. Competitors can copy an agent. They can't copy thousands of accountants already inside customers' books.
 
-## 4. What I'd like you to notice (1:50 to 2:35)
+## 5. The risks (1:45 to 2:15)
 
-> A few choices were deliberate.
->
-> Agents have to earn their freedom. They start with approval-only access and only get more once they prove their accuracy. If accuracy drops, they lose it automatically.
->
-> Every correction an Intuit expert makes becomes a new test for that agent. I think this is Intuit's real advantage. Competitors can copy an agent, but they can't copy thousands of accountants already working inside customers' books.
->
-> I also checked what Intuit has already launched. I dropped my first idea, an AI chat assistant for CFOs, because Intuit released one in August.
+> The biggest risk is an agent getting a number wrong in someone's books. So every figure must link to its source, agents can only propose entries, and a person approves each one. Second is liability. Tax and loan decisions always need an expert's sign-off, and every action is logged for the auditor. Third is an empty store at launch. Intuit would build the first ten agents itself, based on what Radar shows customers need most.
 
-## 5. How I worked and what I'd test first (2:35 to 2:50)
+## 6. What I'd test first (2:15 to 2:50)
 
-> I used Claude for research and to build the prototype, and I checked every number against its source. The first thing I'd test is whether CFOs actually act on a Radar warning. Thanks for watching.
+> Before building anything, I'd test whether CFOs act on a warning at all. Analysts would hand-build Radar reports for fifty companies that just hit a trigger. If at least thirty percent book a fix within two weeks, Radar is worth building. If not, the idea needs rethinking.
+>
+> Next, I'd test trust with a fake install button in the store, then twenty companies in shadow mode. And I'd share five real demand cards with a hundred developers to see if at least fifteen start building.
+>
+> I used Claude for research and to build the prototype, and I checked every number against its source. Thanks for watching.
 
 ---
 
 ## Recording tips
 
-- Speak slower than feels natural. 445 words fits in three minutes if you keep a steady pace.
+- 450 words fits in three minutes at a steady pace. Practise once with a timer.
 - Keep the script next to the camera, not below it, so you look at the lens.
 - Record each section as its own clip. It is much easier to redo 30 seconds than three minutes.
-- If you run long, shorten section 4 first.
+- If you run long, shorten section 3 first. Keep sections 5 and 6 intact.
